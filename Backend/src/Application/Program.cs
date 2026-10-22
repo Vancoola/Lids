@@ -7,8 +7,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDataService(builder.Configuration);
 builder.Services.AddApiInfrastructure(builder.Configuration);
 builder.Services.AddIdentityServices();
-
-builder.Services.AddOpenApi();
+builder.Services.AddDocs();
 
 builder.Services.AddAntiforgery(options =>
 {
@@ -34,6 +33,7 @@ else
 
 app.UseHttpsRedirection();
 
+app.UseRouting();
 app.UseCors();
 app.UseRateLimiter();
 
