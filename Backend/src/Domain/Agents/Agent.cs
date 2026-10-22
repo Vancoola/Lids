@@ -1,10 +1,11 @@
 ﻿using Domain.Abstractions;
+using Domain.Common;
 using Domain.Leads;
 using Domain.Messages;
 
 namespace Domain.Agents;
 
-public class Agent : ISoftDeletable
+public class Agent : AggregateRoot, ISoftDeletable
 {
 
     private readonly List<Lead> _leads;
@@ -37,3 +38,5 @@ public class Agent : ISoftDeletable
         return new(id, platform);
     }
 }
+
+ 

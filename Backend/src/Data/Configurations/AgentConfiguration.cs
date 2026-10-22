@@ -10,7 +10,9 @@ public class AgentConfiguration : IEntityTypeConfiguration<Agent>
     {
         builder.HasKey(a => a.Id);
         builder.Property(a => a.Id).ValueGeneratedOnAdd();
-        
+
+        builder.Ignore(a => a.Events);
+
         //builder.HasQueryFilter(a => !a.IsDeleted);
     }
 }
