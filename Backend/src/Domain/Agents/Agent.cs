@@ -15,27 +15,29 @@ public class Agent : AggregateRoot, ISoftDeletable
     private Agent() {}
     #pragma warning restore CS8618
     
-    private Agent(int id, Platform platform)
+    private Agent(int id, AgentConnection connection)
     {
         Id = id;
-        Platform = platform;
+        Connection = connection;
+        _messages = new List<Message>();
         _leads = new List<Lead>();
         IsDeleted = false;
     }
 
     public int Id { get; private set; }
 
-    public Platform Platform { get; private set; }
-
     public IReadOnlyCollection<Lead> Leads => _leads;
     public IReadOnlyCollection<Message> Messages => _messages;
+    
+    public AgentConnection Connection { get; private set; } = null!;
+    public Platform Platform => Connection.Platform;
     
     public bool IsDeleted { get; set; }
     
 
-    public static Agent Create(int id, Platform platform)
+    public static Agent Create(int id, AgentConnection connection)
     {
-        return new(id, platform);
+        return new(id, connection);
     }
 }
 

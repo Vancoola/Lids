@@ -19,5 +19,7 @@ public class AgentChannelConfiguration : IEntityTypeConfiguration<AgentChannel>
 
         builder.HasOne(a => a.Agent).WithMany().HasForeignKey(a => a.AgentId);
         builder.HasOne(a => a.Channel).WithMany().HasForeignKey(a => a.ChannelId);
+
+        builder.ComplexProperty(a => a.Settings);
     }
 }
