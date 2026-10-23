@@ -1,4 +1,3 @@
-
 const API_BASE_URL = "/api";
 
 export async function apiFetch(
@@ -14,7 +13,7 @@ export async function apiFetch(
             ...(options.body instanceof FormData
                 ? {}
                 : options.body != null
-                    ? { "Content-Type": "application/json" }
+                    ? {"Content-Type": "application/json"}
                     : {}),
             ...options.headers,
         },

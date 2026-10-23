@@ -1,9 +1,8 @@
+import {Navigate, Outlet, useLocation} from "react-router";
+import {LoaderCircle} from "lucide-react";
 
-import { Navigate, Outlet, useLocation } from "react-router";
-import { LoaderCircle } from "lucide-react";
-
-import { Button } from "@/components/ui/button";
-import { useCurrentUser } from "../hooks/useCurrentUser";
+import {Button} from "@/components/ui/button";
+import {useCurrentUser} from "../hooks/useCurrentUser";
 
 export function ProtectedRoute() {
     const location = useLocation();
@@ -19,7 +18,7 @@ export function ProtectedRoute() {
     if (isPending) {
         return (
             <div className="flex min-h-svh items-center justify-center">
-                <LoaderCircle className="size-6 animate-spin text-muted-foreground" />
+                <LoaderCircle className="size-6 animate-spin text-muted-foreground"/>
             </div>
         );
     }
@@ -54,5 +53,5 @@ export function ProtectedRoute() {
         );
     }
 
-    return <Outlet />;
+    return <Outlet/>;
 }

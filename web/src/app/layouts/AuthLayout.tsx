@@ -9,7 +9,7 @@ export function AuthLayout() {
                 <ModeToggle/>
             </div>
             <main className="relative w-full max-w-[420px]">
-                <Outlet />
+                <Outlet/>
             </main>
             <footer className="absolute bottom-4 text-xs text-muted-foreground">
                 © {new Date().getFullYear()} Lids

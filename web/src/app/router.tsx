@@ -1,20 +1,19 @@
-import { createBrowserRouter, Navigate } from "react-router";
+import {createBrowserRouter, Navigate} from "react-router";
 
-import { AuthLayout } from "./layouts/AuthLayout";
-import { DashboardLayout } from "./layouts/DashboardLayout";
+import {AuthLayout} from "./layouts/AuthLayout";
+import {DashboardLayout} from "./layouts/DashboardLayout";
 
-import { LoginPage } from "@/pages/LoginPage";
-import { AgentsPage } from "@/pages/AgentsPage";
+import {LoginPage} from "@/pages/LoginPage";
+import {AgentsPage} from "@/pages/AgentsPage";
 
-import { ProtectedRoute } from
-        "@/features/auth/components/ProtectedRoute";
+import {ProtectedRoute} from "@/features/auth/components/ProtectedRoute";
 
 export const router = createBrowserRouter([
     {
         path: "/login",
         Component: AuthLayout,
         children: [
-            { index: true, Component: LoginPage },
+            {index: true, Component: LoginPage},
         ],
     },
     {
@@ -26,7 +25,7 @@ export const router = createBrowserRouter([
                 children: [
                     {
                         index: true,
-                        element: <Navigate to="/agents" replace />,
+                        element: <Navigate to="/agents" replace/>,
                     },
                     {
                         path: "agents",

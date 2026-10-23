@@ -12,16 +12,17 @@ import {
     SidebarMenuButton,
     SidebarMenuItem,
 } from "@/components/ui/sidebar";
+import {NavUser} from "@/components/shared/NavUser.tsx";
 
 export function AppSidebar() {
     const navigate = useNavigate();
-    const { pathname } = useLocation();
+    const {pathname} = useLocation();
 
     return (
         <Sidebar collapsible="icon" variant="inset">
             <SidebarHeader className="p-4">
                 <div className="flex items-center gap-2">
-                    <Layers3 className="size-5 shrink-0" />
+                    <Layers3 className="size-5 shrink-0"/>
                     <span className="font-semibold group-data-[collapsible=icon]:hidden">
             Lids
           </span>
@@ -40,7 +41,7 @@ export function AppSidebar() {
                                     isActive={pathname.startsWith("/agents")}
                                     onClick={() => navigate("/agents")}
                                 >
-                                    <Bot />
+                                    <Bot/>
                                     <span>Агенты</span>
                                 </SidebarMenuButton>
                             </SidebarMenuItem>
@@ -48,6 +49,7 @@ export function AppSidebar() {
                     </SidebarGroupContent>
                 </SidebarGroup>
             </SidebarContent>
+            <NavUser/>
         </Sidebar>
     );
 }

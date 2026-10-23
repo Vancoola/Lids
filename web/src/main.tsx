@@ -19,13 +19,13 @@ const queryClient = new QueryClient({
 });
 
 createRoot(document.getElementById('root')!).render(
-  <StrictMode>
-      <ThemeProvider defaultTheme="light" storageKey="lids-theme">
-          <QueryClientProvider client={queryClient}>
-              <TooltipProvider>
-                  <RouterProvider router={router}/>
-              </TooltipProvider>
-          </QueryClientProvider>
-      </ThemeProvider>
-  </StrictMode>,
+    <StrictMode>
+        <ThemeProvider defaultTheme="light" storageKey="lids-theme">
+            <QueryClientProvider client={queryClient}>
+                <TooltipProvider>
+                    <RouterProvider router={router}/>
+                </TooltipProvider>
+            </QueryClientProvider>
+        </ThemeProvider>
+    </StrictMode>,
 )

@@ -1,5 +1,5 @@
-import { apiFetch } from "@/lib/api-client";
-import type { CurrentUser } from "../types/auth";
+import {apiFetch} from "@/lib/api-client";
+import type {CurrentUser} from "../types/auth";
 
 export async function getCurrentUser():
     Promise<CurrentUser | null> {
@@ -26,7 +26,7 @@ export async function login(email: string, password: string) {
         throw new Error("Не удалось получить CSRF-токен");
     }
 
-    const { token } = (await csrfResponse.json()) as {
+    const {token} = (await csrfResponse.json()) as {
         token: string;
     };
 
@@ -35,7 +35,7 @@ export async function login(email: string, password: string) {
         headers: {
             "X-CSRF-TOKEN": token,
         },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({email, password}),
     });
 
     if (response.status === 401) {
@@ -44,5 +44,30 @@ export async function login(email: string, password: string) {
 
     if (!response.ok) {
         throw new Error(`Ошибка авторизации: ${response.status}`);
+    }
+}
+
+export async function logout(): Promise<void> {
+    const csrfResponse = await apiFetch("/auth/csrf");
+
+    if (!csrfResponse.ok) {
+        throw new Error("Не удалось получить CSRF-токен");
+    }
+
+    const {token} = (await csrfResponse.json()) as {
+        token: string;
+    };
+
+    const response = await apiFetch("/auth/logout", {
+        method: "POST",
+        headers: {
+            "X-CSRF-TOKEN": token,
+        },
+    });
+
+    if (response.status === 401) return;
+
+    if (!response.ok) {
+        throw new Error("Не удалось выйти из аккаунта");
     }
 }
