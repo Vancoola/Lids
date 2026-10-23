@@ -10,10 +10,10 @@ namespace Domain.Agents;
 
 public class Agent : AggregateRoot, ISoftDeletable
 {
-    private readonly List<AgentChannel> _channels = new List<AgentChannel>();
+    private readonly List<AgentChannel> _channels = new();
 
-    private readonly List<Lead> _leads = new List<Lead>();
-    private readonly List<Message> _messages = new List<Message>();
+    private readonly List<Lead> _leads = new();
+    private readonly List<Message> _messages = new();
 
 #pragma warning disable CS8618
     private Agent()
@@ -30,14 +30,14 @@ public class Agent : AggregateRoot, ISoftDeletable
         IsDeleted = false;
     }
 
-    public int Id { get; private set; }
+    public int Id { get; }
 
     public IReadOnlyCollection<Lead> Leads => _leads.AsReadOnly();
     public IReadOnlyCollection<Message> Messages => _messages.AsReadOnly();
     public IReadOnlyCollection<AgentChannel> Channels => _channels.AsReadOnly();
 
     public Guid ConnectionId { get; private set; }
-    public AgentConnection Connection { get; private set; } = null!;
+    public AgentConnection Connection { get; } = null!;
     public Platform Platform => Connection.Platform;
 
     public SendingSettings SendingSettings { get; private set; } = null!;

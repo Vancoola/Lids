@@ -6,7 +6,7 @@ namespace Domain.Leads;
 
 public class Lead
 {
-    private readonly List<Message> _messages = new List<Message>();
+    private readonly List<Message> _messages = new();
 
 #pragma warning disable CS8618
     private Lead()
