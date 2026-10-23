@@ -1,17 +1,19 @@
 ﻿using Domain.Abstractions;
 using Domain.Common;
+using Domain.Exceptions;
 using Domain.Leads;
 using Domain.Messages;
 using Domain.Parsing;
+using Domain.Sending;
 
 namespace Domain.Agents;
 
 public class Agent : AggregateRoot, ISoftDeletable
 {
-    private readonly List<AgentChannel> _channels;
+    private readonly List<AgentChannel> _channels = new List<AgentChannel>();
 
-    private readonly List<Lead> _leads;
-    private readonly List<Message> _messages;
+    private readonly List<Lead> _leads = new List<Lead>();
+    private readonly List<Message> _messages = new List<Message>();
 
 #pragma warning disable CS8618
     private Agent()
@@ -19,13 +21,12 @@ public class Agent : AggregateRoot, ISoftDeletable
     }
 #pragma warning restore CS8618
 
-    private Agent(int id, AgentConnection connection)
+    private Agent(int id, AgentConnection connection, SendingSettings sendingSettings)
     {
         Id = id;
         Connection = connection;
-        _messages = new List<Message>();
-        _leads = new List<Lead>();
-        _channels = new List<AgentChannel>();
+        ConnectionId = connection.Id;
+        SendingSettings = sendingSettings;
         IsDeleted = false;
     }
 
@@ -35,21 +36,39 @@ public class Agent : AggregateRoot, ISoftDeletable
     public IReadOnlyCollection<Message> Messages => _messages.AsReadOnly();
     public IReadOnlyCollection<AgentChannel> Channels => _channels.AsReadOnly();
 
-    public AgentConnection Connection { get; } = null!;
+    public Guid ConnectionId { get; private set; }
+    public AgentConnection Connection { get; private set; } = null!;
     public Platform Platform => Connection.Platform;
+
+    public SendingSettings SendingSettings { get; private set; } = null!;
 
     public bool IsDeleted { get; set; }
 
     public void ChangeChannelSettings(int agentChannelId, ParsingSettings settings, DateTimeOffset now)
     {
-        var channel = Channels.Single(c => c.Id == agentChannelId);
+        var channel = Channels.SingleOrDefault(c => c.Id == agentChannelId) ??
+                      throw new AgentChannelNotFoundException(Id, agentChannelId);
         channel.ChangeSettings(settings, now);
         Raise(new ParsingScheduleChanged(agentChannelId));
     }
 
-    public static Agent Create(int id, AgentConnection connection)
+    public void ChangeSendingSettings(SendingSettings settings)
     {
-        return new Agent(id, connection);
+        if (settings is null)
+            throw new DomainValidationException("Sending settings are required.");
+
+        SendingSettings = settings;
+    }
+
+    public static Agent Create(int id, AgentConnection connection, SendingSettings sendingSettings)
+    {
+        if (connection is null)
+            throw new DomainValidationException("Agent connection is required.");
+
+        if (sendingSettings is null)
+            throw new DomainValidationException("Sending settings are required.");
+
+        return new Agent(id, connection, sendingSettings);
     }
 }
 

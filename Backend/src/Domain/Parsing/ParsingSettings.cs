@@ -1,4 +1,6 @@
-﻿namespace Domain.Parsing;
+using Domain.Exceptions;
+
+namespace Domain.Parsing;
 
 public sealed record ParsingSettings
 {
@@ -20,11 +22,13 @@ public sealed record ParsingSettings
         bool parseHistory)
     {
         if (interval <= TimeSpan.Zero)
-            throw new ArgumentOutOfRangeException(nameof(interval));
+            throw new DomainValidationException("Parsing interval must be greater than zero.");
 
-        if (messagesPerRun <= 0 || maxMessagesPerDay <= 0)
-            throw new ArgumentOutOfRangeException(
-                nameof(messagesPerRun));
+        if (messagesPerRun <= 0)
+            throw new DomainValidationException("Parsing message limit per run must be greater than zero.");
+
+        if (maxMessagesPerDay <= 0)
+            throw new DomainValidationException("Daily parsing message limit must be greater than zero.");
 
         return new ParsingSettings
         {

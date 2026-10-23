@@ -17,7 +17,8 @@ public class AgentChannelConfiguration : IEntityTypeConfiguration<AgentChannel>
             x.ChannelId
         }).IsUnique();
 
-        builder.HasOne(a => a.Agent).WithMany(a => a.Channels).HasForeignKey(a => a.AgentId);
+        builder.HasOne(a => a.Agent).WithMany(a => a.Channels).HasForeignKey(a => a.AgentId)
+            .OnDelete(DeleteBehavior.ClientNoAction);
         builder.HasOne(a => a.Channel).WithMany().HasForeignKey(a => a.ChannelId);
 
         builder.ComplexProperty(a => a.Settings);

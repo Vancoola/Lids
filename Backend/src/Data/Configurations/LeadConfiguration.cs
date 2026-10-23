@@ -1,4 +1,5 @@
-﻿using Domain.Leads;
+using Data.Identity;
+using Domain.Leads;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -16,6 +17,13 @@ public class LeadConfiguration : IEntityTypeConfiguration<Lead>
         builder
             .HasOne(l => l.ResponsibleAgent)
             .WithMany(a => a.Leads)
-            .HasForeignKey(l => l.ResponsibleAgentId);
+            .HasForeignKey(l => l.ResponsibleAgentId)
+            .OnDelete(DeleteBehavior.ClientNoAction);
+
+        builder
+            .HasOne<ApplicationUser>()
+            .WithMany()
+            .HasForeignKey(l => l.ResponsibleOperatorId)
+            .OnDelete(DeleteBehavior.SetNull);
     }
 }

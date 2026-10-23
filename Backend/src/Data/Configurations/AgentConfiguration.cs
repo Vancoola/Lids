@@ -13,6 +13,11 @@ public class AgentConfiguration : IEntityTypeConfiguration<Agent>
 
         builder.Ignore(a => a.Events);
 
+        builder.ComplexProperty(a => a.SendingSettings);
+
+        builder.HasOne(a => a.Connection).WithMany().HasForeignKey(a => a.ConnectionId)
+            .OnDelete(DeleteBehavior.ClientNoAction);
+
         //builder.HasQueryFilter(a => !a.IsDeleted);
     }
 }
