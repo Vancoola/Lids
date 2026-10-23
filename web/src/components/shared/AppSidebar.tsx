@@ -1,16 +1,16 @@
-import { Bot, Layers3 } from "lucide-react";
-import { useLocation, useNavigate } from "react-router";
+import {Bot, Layers3} from "lucide-react";
+import {useLocation, useNavigate} from "react-router";
 
 import {
     Sidebar,
-    SidebarHeader,
     SidebarContent,
     SidebarGroup,
-    SidebarGroupLabel,
     SidebarGroupContent,
+    SidebarGroupLabel,
+    SidebarHeader,
     SidebarMenu,
-    SidebarMenuItem,
     SidebarMenuButton,
+    SidebarMenuItem,
 } from "@/components/ui/sidebar";
 
 export function AppSidebar() {
@@ -18,7 +18,7 @@ export function AppSidebar() {
     const { pathname } = useLocation();
 
     return (
-        <Sidebar collapsible="icon">
+        <Sidebar collapsible="icon" variant="inset">
             <SidebarHeader className="p-4">
                 <div className="flex items-center gap-2">
                     <Layers3 className="size-5 shrink-0" />

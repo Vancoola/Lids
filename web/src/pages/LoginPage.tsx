@@ -22,8 +22,8 @@ export function LoginPage() {
         <div className="space-y-8">
             {/* Branding */}
             <div className="flex items-center justify-center gap-2.5">
-                <div className="flex size-10 items-center justify-center rounded-xl bg-indigo-600 text-white shadow-sm">
-                    <Layers3 className="size-5" strokeWidth={2.2}/>
+                <div className="flex size-10 items-center justify-center rounded-xl bg-primary text-primary-foreground">
+                    <Layers3 className="size-5"/>
                 </div>
 
                 <span className="text-2xl font-bold tracking-tight">
@@ -32,8 +32,7 @@ export function LoginPage() {
             </div>
 
             {/* Login card */}
-            <section
-                className="rounded-2xl border border-border/70 bg-card p-8 shadow-[0_12px_48px_-20px_rgba(15,23,42,0.18)] sm:p-9">
+            <section className="rounded-2xl border bg-card p-8 text-card-foreground shadow-panel sm:p-9">
                 <div className="mb-8 space-y-2 text-center">
                     <h1 className="text-2xl font-semibold tracking-tight">
                         Добро пожаловать
@@ -153,7 +152,7 @@ export function LoginPage() {
                     <Button
                         type="submit"
                         disabled={isSubmitting}
-                        className="h-11 w-full bg-indigo-600 text-white hover:bg-indigo-500"
+                        className="h-11 w-full"
                     >
                         {isSubmitting ? "Выполняется вход..." : "Войти"}
                     </Button>
