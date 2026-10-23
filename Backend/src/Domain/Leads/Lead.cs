@@ -28,7 +28,7 @@ public class Lead
     public Agent? ResponsibleAgent { get; private set; }
     public int ResponsibleAgentId { get; private set; }
     
-    public IReadOnlyCollection<Message> Messages => _messages;
+    public IReadOnlyCollection<Message> Messages => _messages.AsReadOnly();
     
 
     public static Lead Create(string name, int responsibleAgentId)

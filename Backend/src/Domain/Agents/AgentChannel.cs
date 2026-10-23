@@ -19,4 +19,13 @@ public class AgentChannel
     
     public bool IsEnabled { get; private set; }
     
+    public DateTimeOffset NextRunAt { get; private set; }
+    public DateTimeOffset LastRunAt { get; private set; }
+
+    public void ChangeSettings(ParsingSettings settings, DateTimeOffset now)
+    {
+        Settings = settings;
+        NextRunAt = now.Add(settings.Interval);
+    }
+    
 }
