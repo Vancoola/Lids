@@ -18,10 +18,7 @@ builder.Services.AddApiInfrastructure(builder.Configuration);
 builder.Services.AddIdentityServices();
 builder.Services.AddDocs();
 
-builder.Services.AddAntiforgery(options =>
-{
-    options.HeaderName = "X-CSRF-TOKEN";
-});
+builder.Services.AddAntiforgery(options => { options.HeaderName = "X-CSRF-TOKEN"; });
 
 var app = builder.Build();
 
@@ -29,10 +26,7 @@ if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
 
-    app.MapScalarApiReference("/docs", options =>
-    {
-        options.WithTitle("Lids API");
-    });
+    app.MapScalarApiReference("/docs", options => { options.WithTitle("Lids API"); });
 }
 else
 {

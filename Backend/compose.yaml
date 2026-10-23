@@ -4,7 +4,7 @@
     build:
       context: .
       dockerfile: src/Application/Dockerfile
-      
+  
   postgres:
     image: postgres:17-alpine
     container_name: lids-postgres
@@ -21,8 +21,8 @@
       interval: 5s
       timeout: 5s
       retries: 5
-    
-    
+
+
 volumes:
   postgres_data:
 

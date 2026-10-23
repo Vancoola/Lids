@@ -3,20 +3,23 @@
 public abstract class AggregateRoot
 {
     private readonly List<DomainEvent> _events = [];
-    
+
     /// <summary>
-    /// Получить все события
+    ///     Получить все события
     /// </summary>
     public IReadOnlyCollection<DomainEvent> Events => _events.AsReadOnly();
-    
+
     /// <summary>
-    /// Добавить событие
+    ///     Добавить событие
     /// </summary>
     /// <param name="domainEvent"></param>
-    protected void Raise(DomainEvent domainEvent) => _events.Add(domainEvent);
-    
+    protected void Raise(DomainEvent domainEvent)
+    {
+        _events.Add(domainEvent);
+    }
+
     /// <summary>
-    /// Собрать все события и очистить коллекцию
+    ///     Собрать все события и очистить коллекцию
     /// </summary>
     /// <returns>Коллекция событий</returns>
     public IReadOnlyCollection<DomainEvent> PullDomainEvents()

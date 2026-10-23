@@ -8,24 +8,23 @@ public static class IdentityExtensions
 {
     public static IServiceCollection AddIdentityServices(this IServiceCollection services)
     {
-
         services.AddIdentity<ApplicationUser, IdentityRole<Guid>>(options =>
-        {
-            options.User.RequireUniqueEmail = true;
-            
-            options.Password.RequiredLength = 6;
-            options.Password.RequireDigit = true;
-            options.Password.RequireLowercase = true;
-            options.Password.RequireUppercase = true;
-            options.Password.RequireNonAlphanumeric = true;
-            
-            options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(15);
-            options.Lockout.MaxFailedAccessAttempts = 5;
-            
-            options.SignIn.RequireConfirmedEmail = false;
-        })
-        .AddEntityFrameworkStores<ApplicationDbContext>()
-        .AddDefaultTokenProviders();
+            {
+                options.User.RequireUniqueEmail = true;
+
+                options.Password.RequiredLength = 6;
+                options.Password.RequireDigit = true;
+                options.Password.RequireLowercase = true;
+                options.Password.RequireUppercase = true;
+                options.Password.RequireNonAlphanumeric = true;
+
+                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(15);
+                options.Lockout.MaxFailedAccessAttempts = 5;
+
+                options.SignIn.RequireConfirmedEmail = false;
+            })
+            .AddEntityFrameworkStores<ApplicationDbContext>()
+            .AddDefaultTokenProviders();
 
         services.ConfigureApplicationCookie(options =>
         {
@@ -48,9 +47,9 @@ public static class IdentityExtensions
                 return Task.CompletedTask;
             };
         });
-        
+
         services.AddAuthorization();
-        
+
         return services;
     }
 }

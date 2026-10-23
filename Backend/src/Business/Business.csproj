@@ -7,11 +7,11 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <Folder Include="Abstractions\Persistence\" />
+        <Folder Include="Abstractions\Persistence\"/>
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Data\Data.csproj" />
+        <ProjectReference Include="..\Data\Data.csproj"/>
     </ItemGroup>
 
 </Project>

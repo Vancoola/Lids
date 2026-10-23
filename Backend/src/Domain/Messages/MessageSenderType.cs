@@ -3,5 +3,5 @@
 public enum MessageSenderType
 {
     Lead,
-    Agent 
+    Agent
 }

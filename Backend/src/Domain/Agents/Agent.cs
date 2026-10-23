@@ -8,15 +8,17 @@ namespace Domain.Agents;
 
 public class Agent : AggregateRoot, ISoftDeletable
 {
+    private readonly List<AgentChannel> _channels;
 
     private readonly List<Lead> _leads;
-    private List<Message> _messages;
-    private List<AgentChannel> _channels;
-    
-    #pragma warning disable CS8618
-    private Agent() {}
-    #pragma warning restore CS8618
-    
+    private readonly List<Message> _messages;
+
+#pragma warning disable CS8618
+    private Agent()
+    {
+    }
+#pragma warning restore CS8618
+
     private Agent(int id, AgentConnection connection)
     {
         Id = id;
@@ -32,10 +34,10 @@ public class Agent : AggregateRoot, ISoftDeletable
     public IReadOnlyCollection<Lead> Leads => _leads.AsReadOnly();
     public IReadOnlyCollection<Message> Messages => _messages.AsReadOnly();
     public IReadOnlyCollection<AgentChannel> Channels => _channels.AsReadOnly();
-    
-    public AgentConnection Connection { get; private set; } = null!;
-    public Platform Platform => Connection.Platform; 
-    
+
+    public AgentConnection Connection { get; } = null!;
+    public Platform Platform => Connection.Platform;
+
     public bool IsDeleted { get; set; }
 
     public void ChangeChannelSettings(int agentChannelId, ParsingSettings settings, DateTimeOffset now)
@@ -47,10 +49,8 @@ public class Agent : AggregateRoot, ISoftDeletable
 
     public static Agent Create(int id, AgentConnection connection)
     {
-        return new(id, connection);
+        return new Agent(id, connection);
     }
 }
 
 public record ParsingScheduleChanged(int AgentChannelId) : DomainEvent;
-
- 

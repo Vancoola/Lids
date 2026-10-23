@@ -31,7 +31,7 @@ public static class IdentityBootstrapper
 
             EnsureSucceeded(result);
         }
-        
+
         var admins = await userManager
             .GetUsersInRoleAsync(SuperAdminRole);
 
@@ -45,7 +45,7 @@ public static class IdentityBootstrapper
             string.IsNullOrWhiteSpace(password))
             throw new InvalidOperationException(
                 "Bootstrap admin credentials are missing.");
-        
+
         var existing = await userManager.FindByEmailAsync(email);
 
         if (existing is not null)

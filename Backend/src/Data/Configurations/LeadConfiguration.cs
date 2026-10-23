@@ -10,9 +10,9 @@ public class LeadConfiguration : IEntityTypeConfiguration<Lead>
     {
         builder.HasKey(l => l.Id);
         builder.Property(l => l.Id).ValueGeneratedOnAdd();
-        
+
         builder.Property(l => l.Name).IsRequired();
-        
+
         builder
             .HasOne(l => l.ResponsibleAgent)
             .WithMany(a => a.Leads)

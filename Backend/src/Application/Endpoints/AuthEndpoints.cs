@@ -13,7 +13,7 @@ public static class AuthEndpoints
         var group = app.MapGroup("/api/auth")
             .WithTags("Authentication")
             .AddEndpointFilter<CsrfEndpointFilter>();
-        
+
         group.MapGet("/csrf", (
                 HttpContext context,
                 IAntiforgery antiforgery) =>
@@ -56,8 +56,8 @@ public static class AuthEndpoints
         var result = await signInManager.PasswordSignInAsync(
             user,
             request.Password,
-            isPersistent: false,
-            lockoutOnFailure: true);
+            false,
+            true);
 
         return result.Succeeded
             ? Results.NoContent()

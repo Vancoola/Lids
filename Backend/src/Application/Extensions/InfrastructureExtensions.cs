@@ -34,22 +34,21 @@ public static class InfrastructureExtensions
                 StatusCodes.Status429TooManyRequests;
 
             options.GlobalLimiter =
-                PartitionedRateLimiter.Create<HttpContext, string>(
-                    context =>
-                    {
-                        var ip = context.Connection.RemoteIpAddress?
-                            .ToString() ?? "unknown";
+                PartitionedRateLimiter.Create<HttpContext, string>(context =>
+                {
+                    var ip = context.Connection.RemoteIpAddress?
+                        .ToString() ?? "unknown";
 
-                        return RateLimitPartition.GetFixedWindowLimiter(
-                            ip,
-                            _ => new FixedWindowRateLimiterOptions
-                            {
-                                PermitLimit = 100,
-                                Window = TimeSpan.FromMinutes(1),
-                                QueueLimit = 0,
-                                AutoReplenishment = true
-                            });
-                    });
+                    return RateLimitPartition.GetFixedWindowLimiter(
+                        ip,
+                        _ => new FixedWindowRateLimiterOptions
+                        {
+                            PermitLimit = 100,
+                            Window = TimeSpan.FromMinutes(1),
+                            QueueLimit = 0,
+                            AutoReplenishment = true
+                        });
+                });
 
             options.OnRejected = async (context, token) =>
             {
@@ -59,13 +58,11 @@ public static class InfrastructureExtensions
                     StatusCodes.Status429TooManyRequests;
 
                 if (context.Lease.TryGetMetadata(
-                    MetadataName.RetryAfter,
-                    out var retryAfter))
-                {
+                        MetadataName.RetryAfter,
+                        out var retryAfter))
                     response.Headers.RetryAfter =
                         Math.Ceiling(retryAfter.TotalSeconds)
                             .ToString(CultureInfo.InvariantCulture);
-                }
 
                 await Results.Problem(
                     statusCode: 429,
