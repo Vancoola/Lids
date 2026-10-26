@@ -8,3 +8,6 @@ riderModule.iml
 
 logs/
 **/logs/
+
+tests
+docs

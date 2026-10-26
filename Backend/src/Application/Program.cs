@@ -16,11 +16,18 @@ builder.Host.UseSerilog((context, services, configuration) =>
 builder.Services.AddDataService(builder.Configuration);
 builder.Services.AddApiInfrastructure(builder.Configuration);
 builder.Services.AddIdentityServices();
+builder.Services.AddTelegramServices(builder.Configuration); 
 builder.Services.AddDocs();
 
-builder.Services.AddAntiforgery(options => { options.HeaderName = "X-CSRF-TOKEN"; });
+builder.Services.AddAntiforgery(options =>
+{
+    options.HeaderName = "X-CSRF-TOKEN";
+    options.Cookie.Name = "lids.csrf";
+});
 
 var app = builder.Build();
+
+app.UseExceptionHandler();
 
 if (app.Environment.IsDevelopment())
 {
@@ -30,7 +37,6 @@ if (app.Environment.IsDevelopment())
 }
 else
 {
-    app.UseExceptionHandler();
     app.UseHsts();
 }
 
@@ -40,13 +46,13 @@ app.UseHttpsRedirection();
 
 app.UseRouting();
 app.UseCors();
-app.UseRateLimiter();
-
 app.UseAuthentication();
+app.UseRateLimiter();
 app.UseAuthorization();
 app.UseAntiforgery();
 
 app.MapAuthEndpoints();
+app.MapTelegramEndpoints();
 app.MapHealthChecks("/health");
 
 await app.Services.SeedSuperAdminAsync(app.Configuration);

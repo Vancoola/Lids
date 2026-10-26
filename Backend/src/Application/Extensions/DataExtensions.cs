@@ -14,7 +14,7 @@ public static class DataExtensions
 
         serviceCollection.AddSingleton<SoftDeleteInterceptor>();
 
-        serviceCollection.AddDbContext<ApplicationDbContext>((sp, options) =>
+        serviceCollection.AddDbContextFactory<ApplicationDbContext>((sp, options) =>
         {
             options.UseNpgsql(connectionString);
 

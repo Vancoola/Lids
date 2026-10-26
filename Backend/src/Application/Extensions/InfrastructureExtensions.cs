@@ -1,5 +1,6 @@
 ﻿using System.Globalization;
 using System.Threading.RateLimiting;
+using Application.Exceptions;
 
 namespace Application.Extensions;
 
@@ -10,6 +11,8 @@ public static class InfrastructureExtensions
         IConfiguration configuration)
     {
         services.AddProblemDetails();
+        services.AddExceptionHandler<DomainExceptionHandler>();
+        services.AddExceptionHandler<BusinessExceptionHandler>();
         services.AddHealthChecks();
 
         services.AddCors(options =>
