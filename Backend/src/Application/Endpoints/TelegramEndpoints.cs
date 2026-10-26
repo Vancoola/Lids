@@ -101,4 +101,5 @@ public static class TelegramEndpoints
 }
 
 public record StartTelegramAuthorizationRequest(string PhoneNumber);
+
 public record ContinueTelegramAuthorizationRequest(TelegramAuthorizationStep Step, string Value);

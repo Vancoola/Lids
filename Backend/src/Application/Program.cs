@@ -16,7 +16,7 @@ builder.Host.UseSerilog((context, services, configuration) =>
 builder.Services.AddDataService(builder.Configuration);
 builder.Services.AddApiInfrastructure(builder.Configuration);
 builder.Services.AddIdentityServices();
-builder.Services.AddTelegramServices(builder.Configuration); 
+builder.Services.AddTelegramServices(builder.Configuration);
 builder.Services.AddDocs();
 
 builder.Services.AddAntiforgery(options =>

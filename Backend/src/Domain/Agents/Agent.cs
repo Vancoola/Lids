@@ -54,10 +54,7 @@ public class Agent : AggregateRoot, ISoftDeletable
 
     public void ChangeSendingSettings(SendingSettings settings)
     {
-        if (settings is null)
-            throw new DomainValidationException("Sending settings are required.");
-
-        SendingSettings = settings;
+        SendingSettings = settings ?? throw new DomainValidationException("Sending settings are required.");
     }
 
     public static Agent Create(int id, AgentConnection connection, SendingSettings sendingSettings)

@@ -37,7 +37,8 @@ public sealed class TelegramAgentStore(IDbContextFactory<ApplicationDbContext> c
             exception.InnerException is PostgresException
             {
                 SqlState: PostgresErrorCodes.UniqueViolation,
-                ConstraintName: "IX_AgentConnections_UserId" or "IX_AgentConnections_SessionKey" or "PK_TelegramSessions"
+                ConstraintName: "IX_AgentConnections_UserId" or "IX_AgentConnections_SessionKey"
+                or "PK_TelegramSessions"
             })
         {
             context.ChangeTracker.Clear();

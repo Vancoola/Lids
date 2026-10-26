@@ -10,7 +10,6 @@ public sealed class TelegramAuthorizationCleanupWorker(
     {
         using var timer = new PeriodicTimer(TimeSpan.FromMinutes(1));
         while (await timer.WaitForNextTickAsync(stoppingToken))
-        {
             try
             {
                 await authorizationService.RemoveExpiredAsync(stoppingToken);
@@ -20,6 +19,5 @@ public sealed class TelegramAuthorizationCleanupWorker(
                 logger.LogError("Failed to clean up expired Telegram authorizations: {ErrorType}",
                     exception.GetType().Name);
             }
-        }
     }
 }

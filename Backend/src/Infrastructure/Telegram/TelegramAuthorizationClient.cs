@@ -6,32 +6,33 @@ using Business.Abstractions.Telegram;
 using Business.Contracts.Telegram;
 using Business.Exceptions;
 using TL;
+using WTelegram;
 
 namespace Infrastructure.Telegram;
 
 public sealed class TelegramAuthorizationClient : ITelegramAuthorizationClient
 {
-    private readonly WTelegram.Client _client;
-    private readonly TelegramOptions _options;
+    private readonly Client _client;
     private readonly CancellationTokenSource _lifetime = new();
+    private readonly TelegramOptions _options;
     private readonly object _sessionLock = new();
-    private TaskCompletionSource<TelegramAuthorizationStep> _nextStep = NewStep();
     private TaskCompletionSource<string>? _answer;
+    private bool _disposed;
     private Task? _loginTask;
+    private TaskCompletionSource<TelegramAuthorizationStep> _nextStep = NewStep();
     private string? _phoneNumber;
     private byte[] _sessionData = [];
-    private bool _disposed;
 
     static TelegramAuthorizationClient()
     {
         // Диагностические сообщения библиотеки могут содержать данные авторизации.
-        WTelegram.Helpers.Log = (_, _) => { };
+        Helpers.Log = (_, _) => { };
     }
 
     public TelegramAuthorizationClient(TelegramOptions options)
     {
         _options = options;
-        _client = new WTelegram.Client(Config, null, SaveSession)
+        _client = new Client(Config, null, SaveSession)
         {
             FloodRetryThreshold = 0
         };
@@ -60,7 +61,9 @@ public sealed class TelegramAuthorizationClient : ITelegramAuthorizationClient
     public byte[] GetSessionData()
     {
         lock (_sessionLock)
+        {
             return _sessionData.ToArray();
+        }
     }
 
     public async ValueTask DisposeAsync()
@@ -180,13 +183,15 @@ public sealed class TelegramAuthorizationClient : ITelegramAuthorizationClient
         {
             if (rpc.Code == 420)
                 return new TelegramAuthorizationException(
-                    "Telegram temporarily limited authorization requests. Try again later.", HttpStatusCode.TooManyRequests);
+                    "Telegram temporarily limited authorization requests. Try again later.",
+                    HttpStatusCode.TooManyRequests);
 
             return rpc.Message switch
             {
                 "PHONE_NUMBER_INVALID" => new TelegramAuthorizationException("Phone number is invalid."),
                 "PHONE_NUMBER_BANNED" => new TelegramAuthorizationException("This phone number is banned by Telegram."),
-                "PHONE_CODE_EXPIRED" => new TelegramAuthorizationException("The code has expired. Start a new authorization."),
+                "PHONE_CODE_EXPIRED" => new TelegramAuthorizationException(
+                    "The code has expired. Start a new authorization."),
                 "PHONE_CODE_INVALID" or "PASSWORD_HASH_INVALID" or "CODE_INVALID" => new TelegramAuthorizationException(
                     "Too many incorrect authorization values. Start a new authorization."),
                 "API_ID_INVALID" => new TelegramAuthorizationException("Telegram API credentials are invalid.",

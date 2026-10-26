@@ -17,6 +17,22 @@ public sealed class TelegramAuthorizationService(
     private readonly ConcurrentDictionary<Guid, AuthorizationAttempt> _attempts = new();
     private readonly object _sync = new();
 
+    public async ValueTask DisposeAsync()
+    {
+        foreach (var attempt in _attempts.Values)
+        {
+            await attempt.Gate.WaitAsync();
+            try
+            {
+                await CloseAsync(attempt);
+            }
+            finally
+            {
+                attempt.Gate.Release();
+            }
+        }
+    }
+
     public async Task<TelegramAuthorizationResult> StartAsync(
         Guid ownerId,
         string phoneNumber,
@@ -25,7 +41,8 @@ public sealed class TelegramAuthorizationService(
         if (string.IsNullOrWhiteSpace(phoneNumber) || phoneNumber.Length is < 8 or > 16 ||
             phoneNumber[0] != '+' || phoneNumber[1] == '0' ||
             phoneNumber.AsSpan(1).ContainsAnyExceptInRange('0', '9'))
-            throw new TelegramAuthorizationException("Phone number must use international format, for example +79991234567.");
+            throw new TelegramAuthorizationException(
+                "Phone number must use international format, for example +79991234567.");
 
         AuthorizationAttempt attempt;
         lock (_sync)
@@ -64,7 +81,8 @@ public sealed class TelegramAuthorizationService(
                     HttpStatusCode.Conflict);
 
             if (string.IsNullOrWhiteSpace(value) || value.Length > 4096)
-                throw new TelegramAuthorizationException("Authorization value is required and must not exceed 4096 characters.");
+                throw new TelegramAuthorizationException(
+                    "Authorization value is required and must not exceed 4096 characters.");
 
             try
             {
@@ -119,7 +137,8 @@ public sealed class TelegramAuthorizationService(
         {
             EnsureActive(attempt);
             if (attempt.Step is not (TelegramAuthorizationStep.Authorized or TelegramAuthorizationStep.Completed))
-                throw new TelegramAuthorizationException("Telegram authorization is not complete.", HttpStatusCode.Conflict);
+                throw new TelegramAuthorizationException("Telegram authorization is not complete.",
+                    HttpStatusCode.Conflict);
 
             return await CompleteAsync(attempt, ct);
         }
@@ -150,22 +169,6 @@ public sealed class TelegramAuthorizationService(
             if (!await attempt.Gate.WaitAsync(0, ct))
                 continue;
 
-            try
-            {
-                await CloseAsync(attempt);
-            }
-            finally
-            {
-                attempt.Gate.Release();
-            }
-        }
-    }
-
-    public async ValueTask DisposeAsync()
-    {
-        foreach (var attempt in _attempts.Values)
-        {
-            await attempt.Gate.WaitAsync();
             try
             {
                 await CloseAsync(attempt);

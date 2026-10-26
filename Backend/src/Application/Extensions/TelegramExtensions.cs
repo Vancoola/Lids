@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using System.Threading.RateLimiting;
 using Application.Workers;
 using Business.Abstractions.Telegram;
@@ -22,7 +23,7 @@ public static class TelegramExtensions
         {
             options.AddPolicy("telegram-authorization", context =>
                 RateLimitPartition.GetFixedWindowLimiter(
-                    context.User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value ??
+                    context.User.FindFirst(ClaimTypes.NameIdentifier)?.Value ??
                     context.Connection.RemoteIpAddress?.ToString() ?? "unknown",
                     _ => new FixedWindowRateLimiterOptions
                     {

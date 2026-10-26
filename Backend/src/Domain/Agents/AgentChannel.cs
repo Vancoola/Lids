@@ -39,10 +39,7 @@ public class AgentChannel
 
     public void ChangeSettings(ParsingSettings settings, DateTimeOffset now)
     {
-        if (settings is null)
-            throw new DomainValidationException("Parsing settings are required.");
-
-        Settings = settings;
+        Settings = settings ?? throw new DomainValidationException("Parsing settings are required.");
         NextRunAt = now.Add(settings.Interval);
     }
 
